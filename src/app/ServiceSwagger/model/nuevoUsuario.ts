@@ -10,8 +10,10 @@
  * Do not edit the class manually.
  */
 
-export interface RegisterRequest { 
+export interface NuevoUsuario { 
     email?: string;
-    password?: string;
-    username?: string;
+    nombre: string;
+    nombreUsuario: string;
+    password: string;
+    roles?: Array<string>;
 }

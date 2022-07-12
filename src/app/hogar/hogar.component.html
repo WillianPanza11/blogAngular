@@ -1,0 +1,114 @@
+<div class="fondoHeader">
+  <header>
+    <nav>
+      <a class="logo" href="#">
+        <img src="assets/img/no.png">
+      </a>
+      <a *ngIf="!isLogged" class="signin" href="/login">
+        Ingresar
+      </a>
+      <a *ngIf="isLogged" class="signin" href="/add-post">
+        POSTEAR
+      </a>
+      <button *ngIf="isLogged" class="logout btn btn-default" (click)="logout()">Salir</button>
+    </nav>
+    <section *ngIf="!isLogged" class="pitch">
+      <h1 class="pitch_title">Postee lo que desee</h1>
+      <p class="pitch_subtitle">SI YA ESTAS REGISTRADO SOLO INGRESA</p>
+      <!--<button href="/register" class="btn">UNIRME</button>-->
+      <a href="/register" class="btn">UNIRME</a>
+    </section>
+    <section *ngIf="isLogged" class="pitch">
+      <h1 class="pitch_title">{{nombreUsuario+" "}}se te ocurrió algo?</h1>
+      <!--<button href="/register" class="btn">UNIRME</button>-->
+      <a href="/add-post" class="btn">Poster</a>
+    </section>
+  </header>
+</div>
+
+<div id="features" class="fondoAll">
+  <nav>
+    <div class="center columns size-80">
+      <a href="#" class="column is-selected" data-id="cancelanytime">
+        <img src="assets/img/note.svg" alt="">
+        <h2> PUBLICACIONES <br> Cancel online</h2>
+      </a>
+      <a href="#" class="column" data-id="watchanywhere">
+        <img src="assets/img/note.svg" alt="">
+        <h2>Watch aniwhere</h2>
+      </a>
+      <a href="#" class="column" data-id="pickprice">
+        <img src="assets/img/note.svg" alt="">
+        <h2>Pick yor price</h2>
+      </a>
+    </div>
+  </nav>
+  <article>
+    <section class="is-selected" data-id="cancelanytime">
+      <div class="content colorLetra">
+        <div class="container">
+          <div class="row" *ngFor="let post of listAll">
+            <div class="card fondoAll">
+              <div class="card-header">
+                <i class="fas fa-user"></i> Author: <p>{{post.username}}</p>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title"><a href="/post/{{post.id}}" class="blog-title">{{post.title}}</a></h5>
+                <p class="card-text" [innerHTML]="post.content"></p>
+                <a href="/post/{{post.id}}" class="btn btn-primary">Ver mas...</a>
+              </div>
+              <div class="card-footer text-muted">
+                {{post.createdOn}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section class="center size-80" id="watchanywhere" data-id="watchanywhere">
+      <div class="columns">
+        <h2 class="column">
+          watch ti vand movies anytime
+        </h2>
+        <button class="btn btn-large column is-narrow">Join a este lugar</button>
+      </div>
+
+      <div class="columns size-90 center">
+        <div class="column text-center">
+          <img src="assets/img/note.svg" alt="">
+          <h3>Watch on yo utv </h3>
+          <p>smst tv xbox chormast appeltc</p>
+        </div>
+
+        <div class="column text-center">
+          <img src="assets/img/note.svg" alt="">
+          <h3>Wacht instantle or dwonload for later</h3>
+          <p>available on phone and table , wherer</p>
+        </div>
+
+        <div class="column text-center">
+          <img src="assets/img/note.svg" alt="">
+          <h3>use any computer</h3>
+          <p>watch rig on tefleco</p>
+        </div>
+      </div>
+    </section>
+
+    <section data-id="pickprice" class="center size-70" id="pickprice">
+      <div class="columns">
+        <div class="column">
+          <h2>
+            if you decide net for yo es para ti
+          </h2>
+          <button class="btn btn-large">JOIN FOR FREE</button>
+        </div>
+        <div class="column">
+          <img src="assets/img/note.svg" alt="">
+        </div>
+      </div>
+    </section>
+  </article>
+</div>

@@ -17,8 +17,10 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GenericResponseListPostDto } from '../model/genericResponseListPostDto';
+import { GenericResponsePostDto } from '../model/genericResponsePostDto';
+import { GenericResponsestring } from '../model/genericResponsestring';
 import { PostDto } from '../model/postDto';
-import { ResponseEntity } from '../model/responseEntity';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -27,7 +29,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class PostControllerService {
 
-    protected basePath = '//localhost:8080';
+    protected basePath = 'https://blogplums.herokuapp.com';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -57,19 +59,71 @@ export class PostControllerService {
 
 
     /**
-     * createPost
+     * findPostById
+     *
+     * @param idPost idPost
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public findPostByIdUsingGET(idPost: number, observe?: 'body', reportProgress?: boolean): Observable<GenericResponsePostDto>;
+    public findPostByIdUsingGET(idPost: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponsePostDto>>;
+    public findPostByIdUsingGET(idPost: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponsePostDto>>;
+    public findPostByIdUsingGET(idPost: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (idPost === null || idPost === undefined) {
+            throw new Error('Required parameter idPost was null or undefined when calling findPostByIdUsingGET.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (idPost !== undefined && idPost !== null) {
+            queryParameters = queryParameters.set('idPost', <any>idPost);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (JWT) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GenericResponsePostDto>('get',`${this.basePath}/api/posts/findPostById`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * guardarMenu
      *
      * @param body postDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createPostUsingPOST(body: PostDto, observe?: 'body', reportProgress?: boolean): Observable<ResponseEntity>;
-    public createPostUsingPOST(body: PostDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseEntity>>;
-    public createPostUsingPOST(body: PostDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseEntity>>;
-    public createPostUsingPOST(body: PostDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public guardarMenuUsingPOST(body: PostDto, observe?: 'body', reportProgress?: boolean): Observable<GenericResponsestring>;
+    public guardarMenuUsingPOST(body: PostDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponsestring>>;
+    public guardarMenuUsingPOST(body: PostDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponsestring>>;
+    public guardarMenuUsingPOST(body: PostDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createPostUsingPOST.');
+            throw new Error('Required parameter body was null or undefined when calling guardarMenuUsingPOST.');
         }
 
         let headers = this.defaultHeaders;
@@ -97,7 +151,7 @@ export class PostControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<ResponseEntity>('post',`${this.basePath}/api/posts/`,
+        return this.httpClient.request<GenericResponsestring>('post',`${this.basePath}/api/posts/save`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -109,20 +163,15 @@ export class PostControllerService {
     }
 
     /**
-     * getSinglePost
+     * listarPost
      *
-     * @param id id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSinglePostUsingGET(id: number, observe?: 'body', reportProgress?: boolean): Observable<PostDto>;
-    public getSinglePostUsingGET(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PostDto>>;
-    public getSinglePostUsingGET(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PostDto>>;
-    public getSinglePostUsingGET(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getSinglePostUsingGET.');
-        }
+    public listarPostUsingGET(observe?: 'body', reportProgress?: boolean): Observable<GenericResponseListPostDto>;
+    public listarPostUsingGET(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponseListPostDto>>;
+    public listarPostUsingGET(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponseListPostDto>>;
+    public listarPostUsingGET(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -144,7 +193,7 @@ export class PostControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<PostDto>('get',`${this.basePath}/api/posts/get/${encodeURIComponent(String(id))}`,
+        return this.httpClient.request<GenericResponseListPostDto>('get',`${this.basePath}/api/posts/listar-post`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -155,15 +204,20 @@ export class PostControllerService {
     }
 
     /**
-     * showAllPosts
+     * updatePost
      *
+     * @param body postDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public showAllPostsUsingGET(observe?: 'body', reportProgress?: boolean): Observable<Array<PostDto>>;
-    public showAllPostsUsingGET(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PostDto>>>;
-    public showAllPostsUsingGET(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PostDto>>>;
-    public showAllPostsUsingGET(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updatePostUsingPUT(body: PostDto, observe?: 'body', reportProgress?: boolean): Observable<GenericResponsestring>;
+    public updatePostUsingPUT(body: PostDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponsestring>>;
+    public updatePostUsingPUT(body: PostDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponsestring>>;
+    public updatePostUsingPUT(body: PostDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling updatePostUsingPUT.');
+        }
 
         let headers = this.defaultHeaders;
 
@@ -183,10 +237,16 @@ export class PostControllerService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
+            'application/json'
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
-        return this.httpClient.request<Array<PostDto>>('get',`${this.basePath}/api/posts/all`,
+        return this.httpClient.request<GenericResponsestring>('put',`${this.basePath}/api/posts/updatePost`,
             {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

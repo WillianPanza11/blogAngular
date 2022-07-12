@@ -17,10 +17,11 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { AuthenticationResponse } from '../model/authenticationResponse';
-import { LoginRequest } from '../model/loginRequest';
-import { RegisterRequest } from '../model/registerRequest';
-import { ResponseEntity } from '../model/responseEntity';
+import { GenericResponseJwtDto } from '../model/genericResponseJwtDto';
+import { GenericResponseOptionalUsuario } from '../model/genericResponseOptionalUsuario';
+import { GenericResponsestring } from '../model/genericResponsestring';
+import { LoginUsuario } from '../model/loginUsuario';
+import { NuevoUsuario } from '../model/nuevoUsuario';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -29,7 +30,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class AuthControllerService {
 
-    protected basePath = '//localhost:8080';
+    protected basePath = 'https://blogplums.herokuapp.com';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -59,16 +60,68 @@ export class AuthControllerService {
 
 
     /**
-     * login
+     * findNombre
      *
-     * @param body loginRequest
+     * @param nombreUsuario nombreUsuario
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public loginUsingPOST(body: LoginRequest, observe?: 'body', reportProgress?: boolean): Observable<AuthenticationResponse>;
-    public loginUsingPOST(body: LoginRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AuthenticationResponse>>;
-    public loginUsingPOST(body: LoginRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AuthenticationResponse>>;
-    public loginUsingPOST(body: LoginRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findNombreUsingGET(nombreUsuario: string, observe?: 'body', reportProgress?: boolean): Observable<GenericResponseOptionalUsuario>;
+    public findNombreUsingGET(nombreUsuario: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponseOptionalUsuario>>;
+    public findNombreUsingGET(nombreUsuario: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponseOptionalUsuario>>;
+    public findNombreUsingGET(nombreUsuario: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (nombreUsuario === null || nombreUsuario === undefined) {
+            throw new Error('Required parameter nombreUsuario was null or undefined when calling findNombreUsingGET.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (nombreUsuario !== undefined && nombreUsuario !== null) {
+            queryParameters = queryParameters.set('nombreUsuario', <any>nombreUsuario);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (JWT) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GenericResponseOptionalUsuario>('get',`${this.basePath}/auth/findUser`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * login
+     *
+     * @param body loginUsuario
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public loginUsingPOST(body: LoginUsuario, observe?: 'body', reportProgress?: boolean): Observable<GenericResponseJwtDto>;
+    public loginUsingPOST(body: LoginUsuario, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponseJwtDto>>;
+    public loginUsingPOST(body: LoginUsuario, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponseJwtDto>>;
+    public loginUsingPOST(body: LoginUsuario, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling loginUsingPOST.');
@@ -99,7 +152,7 @@ export class AuthControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<AuthenticationResponse>('post',`${this.basePath}/api/auth/login`,
+        return this.httpClient.request<GenericResponseJwtDto>('post',`${this.basePath}/auth/login`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -111,19 +164,19 @@ export class AuthControllerService {
     }
 
     /**
-     * signup
+     * nuevo
      *
-     * @param body registerRequest
+     * @param body nuevoUsuario
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public signupUsingPOST(body: RegisterRequest, observe?: 'body', reportProgress?: boolean): Observable<ResponseEntity>;
-    public signupUsingPOST(body: RegisterRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseEntity>>;
-    public signupUsingPOST(body: RegisterRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseEntity>>;
-    public signupUsingPOST(body: RegisterRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public nuevoUsingPOST(body: NuevoUsuario, observe?: 'body', reportProgress?: boolean): Observable<GenericResponsestring>;
+    public nuevoUsingPOST(body: NuevoUsuario, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponsestring>>;
+    public nuevoUsingPOST(body: NuevoUsuario, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponsestring>>;
+    public nuevoUsingPOST(body: NuevoUsuario, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling signupUsingPOST.');
+            throw new Error('Required parameter body was null or undefined when calling nuevoUsingPOST.');
         }
 
         let headers = this.defaultHeaders;
@@ -151,7 +204,7 @@ export class AuthControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<ResponseEntity>('post',`${this.basePath}/api/auth/signup`,
+        return this.httpClient.request<GenericResponsestring>('post',`${this.basePath}/auth/nuevo`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

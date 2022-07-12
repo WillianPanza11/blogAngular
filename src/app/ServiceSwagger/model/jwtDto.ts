@@ -9,8 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GrantedAuthority } from './grantedAuthority';
 
-export interface LoginRequest { 
-    password?: string;
-    username?: string;
+export interface JwtDto { 
+    authorities?: Array<GrantedAuthority>;
+    bearer?: string;
+    nombreUsuario?: string;
+    token?: string;
 }

@@ -9,10 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { PostDto } from './postDto';
 
-export interface PostDto { 
-    content?: string;
-    id?: number;
-    title?: string;
-    username?: string;
+export interface GenericResponseListPostDto { 
+    message?: string;
+    object?: Array<PostDto>;
+    status?: number;
 }

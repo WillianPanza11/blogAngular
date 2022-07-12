@@ -1,11 +1,7 @@
 import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
-import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
+import { AuthControllerService, BasicErrorControllerService, Configuration, PostControllerService } from './ServiceSwagger';
 
-
-import { AuthControllerService } from './api/authController.service';
-import { BasicErrorControllerService } from './api/basicErrorController.service';
-import { PostControllerService } from './api/postController.service';
 
 @NgModule({
   imports:      [],
