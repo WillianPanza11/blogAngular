@@ -8,7 +8,7 @@ app.get('/*',(req,resp)=>{
     resp.sendFile(path.join(__dirname+'/dist/blog-angular/index.html'));
 });
 
-app.listen(process.env.PORT || 8080);
+app.listen(process.env.PORT || 5000);
 
 // app.use(express.static(__dirname+'/dist/ng-blog'));
 // app.get('/',function(req,res){
