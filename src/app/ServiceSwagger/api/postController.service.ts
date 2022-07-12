@@ -29,7 +29,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class PostControllerService {
 
-    protected basePath = 'https://blogplums.herokuapp.com';
+    protected basePath = '//blogplums.herokuapp.com';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
