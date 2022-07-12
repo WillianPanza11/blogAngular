@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^14.0.4",
     "@angular/router": "^14.0.4",
     "@tinymce/tinymce-angular": "^6.0.1",
+    "typescript": "~4.7.4",
     "bootstrap": "^5.1.3",
     "bootstrap-icons": "^1.8.3",
     "express": "^4.18.1",
@@ -40,8 +41,8 @@
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
-    "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.7.4"
+    "karma-jasmine-html-reporter": "~1.7.0"
+
   },
   "engines": {
     "node": "16.14.0",

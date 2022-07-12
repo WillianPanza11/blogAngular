@@ -1,5 +1,5 @@
 const express = require('express');
-//const path = require('path');
+const path = require('path');
 
 const app = express();
 
@@ -8,7 +8,7 @@ app.get('/*',(req,resp)=>{
     resp.sendFile(path.join(__dirname+'/dist/blog-angular/index.html'));
 });
 
-app.listen(process.env.PORT || 5000);
+app.listen(process.env.PORT || 8080);
 
 // app.use(express.static(__dirname+'/dist/ng-blog'));
 // app.get('/',function(req,res){
