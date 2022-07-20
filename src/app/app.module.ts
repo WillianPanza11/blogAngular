@@ -19,7 +19,7 @@ import {CargarScriptsService} from './cargar-scripts.service';
 import { SpinnerComponent } from './spinner/spinner.component'
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AuthControllerService, PostControllerService } from './ServiceSwagger';
+import { AuthControllerService, PostControllerService, SeccionesControllerService } from './ServiceSwagger';
 import { interceptorProvider } from './interceptor/interceptor.service';
 import {GuardsPostService} from './Guards/guards-post.service';
 
@@ -59,7 +59,8 @@ import {GuardsPostService} from './Guards/guards-post.service';
     AuthControllerService,
     PostControllerService,
     CargarScriptsService,
-    interceptorProvider
+    interceptorProvider,
+    SeccionesControllerService
   ],
   bootstrap: [AppComponent]
 })

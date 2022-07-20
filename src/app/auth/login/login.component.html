@@ -11,11 +11,27 @@
       </div>
       <div class="form-group">
         <input type="text" class="form-control item" id="username" [(ngModel)]="nombreUsuario" formControlName="nombreUser"
-          placeholder="Nombre de usuario con el que siempre ingresará" required="" autofocus="">
+          placeholder="Nombre de usuario con el que se registró" required="" autofocus="">
+          <div class="alert-danger" *ngIf="nombreUser?.invalid && (nombreUser?.dirty || nombreUser?.touched)">
+            <div class="container-error-message" *ngIf="nombreUser?.errors?.['required']">
+              Es requerido
+            </div>
+            <div class="container-error-message" *ngIf="nombreUser?.errors?.['minlength']">
+              Debe contener al menos 4 caracteres
+            </div>
+            <div class="container-error-message" *ngIf="nombreUser?.errors?.['maxlength']">
+              No debe ser mayor a 20 caracteres
+            </div>
+          </div>
       </div>
       <div class="form-group">
         <input type="password" class="form-control item" id="password" [(ngModel)]="password" formControlName="pass"
           placeholder="Contraseña" required="">
+          <div class="alert-danger" *ngIf="pass?.invalid && (pass?.dirty || pass?.touched)">
+            <div class="container-error-message" *ngIf="pass?.errors?.['required']">
+              Es requerido
+            </div>
+          </div>
       </div>
       <div class="form-group">
         <button type="button" class="btn btn-block create-account" (click)="onSubmit()" >Ingresar</button>

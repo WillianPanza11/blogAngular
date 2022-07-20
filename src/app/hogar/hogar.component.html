@@ -31,15 +31,15 @@
     <div class="center columns size-80">
       <a href="#" class="column is-selected" data-id="cancelanytime">
         <img src="assets/img/note.svg" alt="">
-        <h2> PUBLICACIONES <br> Cancel online</h2>
+        <h2> PUBLICACIONES <br>USUARIOS</h2>
       </a>
       <a href="#" class="column" data-id="watchanywhere">
         <img src="assets/img/note.svg" alt="">
         <h2>Watch aniwhere</h2>
       </a>
       <a href="#" class="column" data-id="pickprice">
-        <img src="assets/img/note.svg" alt="">
-        <h2>Pick yor price</h2>
+        <img src="assets/img/engranaj.png" alt="">
+        <h2>COMO ESTA CONSTRUIDA LA PÁGINA</h2>
       </a>
     </div>
   </nav>
@@ -47,26 +47,58 @@
     <section class="is-selected" data-id="cancelanytime">
       <div class="content colorLetra">
         <div class="container">
-          <div class="row" *ngFor="let post of listAll">
-            <div class="card fondoAll">
-              <div class="card-header">
-                <i class="fas fa-user"></i> Author: <p>{{post.username}}</p>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title"><a href="/post/{{post.id}}" class="blog-title">{{post.title}}</a></h5>
-                <p class="card-text" [innerHTML]="post.content"></p>
-                <a href="/post/{{post.id}}" class="btn btn-primary">Ver mas...</a>
-              </div>
-              <div class="card-footer text-muted">
-                {{post.createdOn}}
-              </div>
+          <div class=" flex-container">
+            <select class="col-xs-2 altura espacio" [(ngModel)]="opcionSeleccionado" (change)="SelectSeleccionado()" >
+              <option value="TODO">Todo</option>
+                <option *ngFor="let s of secciones" value="{{ s.idSecciones }}">{{s.nombre}}</option>
+            </select>
+            <div>selected country id: {{opcionSeleccionado}} </div>
+
+            <div class="input-group" *ngIf="isAdmin">
+              <input type="text" class="col-xs-8 altura mb-5" placeholder="NUEVA SECCIÓN" [(ngModel)] = "objSeccion.nombre">
+                <button class="btn btn-outline-secondary altura" type="button" (click)="AgregarSeccion()">Agregar</button>
             </div>
           </div>
+
+          <div *ngIf="listAllSecc; then thenBlock else elseBlock"></div>
+          <ng-template #thenBlock>
+            <div class="row" *ngFor="let post of listAll">
+              <div class="card fondoAll">
+                <div class="card-header">
+                  <i class="fas fa-user"></i> Author: <p>{{post.username}}</p>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title"><a href="/post/{{post.id}}" class="blog-title">{{post.title}}</a></h5>
+                  <p class="card-text" [innerHTML]="post.content"></p>
+                  <a href="/post/{{post.id}}" class="btn btn-primary">Ver mas...</a>
+                </div>
+                <div class="card-footer text-muted">
+                  {{post.createdOn}}
+                </div>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template #elseBlock>
+            <div class="row" *ngFor="let post of listAll">
+              <div class="card fondoAll">
+                <div class="card-header">
+                  <i class="fas fa-user"></i> Author: <p>{{post.username}}</p>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title"><a href="/post/{{post.id}}" class="blog-title">{{post.title}}</a></h5>
+                  <p class="card-text" [innerHTML]="post.content"></p>
+                  <a href="/post/{{post.id}}" class="btn btn-primary">Ver mas...</a>
+                </div>
+                <div class="card-footer text-muted">
+                  {{post.createdOn}}
+                </div>
+              </div>
+            </div>
+          </ng-template>
         </div>
       </div>
     </section>
-
-
 
     <section class="center size-80" id="watchanywhere" data-id="watchanywhere">
       <div class="columns">
@@ -101,12 +133,27 @@
       <div class="columns">
         <div class="column">
           <h2>
-            if you decide net for yo es para ti
+            ESTA FUE LA FORMA EN QUE SE CONSTRUYÓ LA PÁGINA
           </h2>
-          <button class="btn btn-large">JOIN FOR FREE</button>
+          <button *ngIf="isAdmin" class="btn btn-large" routerLink="/add-post">AGREGAR POST</button>
         </div>
         <div class="column">
-          <img src="assets/img/note.svg" alt="">
+          <img src="assets/img/engranaj.png" alt="">
+        </div>
+      </div>
+      <div class="row" *ngFor="let post of postDtoOnly">
+        <div class="card fondoAll">
+          <div class="card-header">
+            <i class="fas fa-user"></i> Author: <p>{{post.username}}</p>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><a href="/post/{{post.id}}" class="blog-title">{{post.title}}</a></h5>
+            <p class="card-text" [innerHTML]="post.content"></p>
+            <a href="/post/{{post.id}}" class="btn btn-primary">Ver mas...</a>
+          </div>
+          <div class="card-footer text-muted">
+            {{post.createdOn}}
+          </div>
         </div>
       </div>
     </section>

@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GenericResponseListPostDto } from '../model/genericResponseListPostDto';
+import { GenericResponseListPostDtoOnly } from '../model/genericResponseListPostDtoOnly';
 import { GenericResponsePostDto } from '../model/genericResponsePostDto';
 import { GenericResponsestring } from '../model/genericResponsestring';
 import { PostDto } from '../model/postDto';
@@ -29,7 +30,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class PostControllerService {
 
-    protected basePath = '//blogplums.herokuapp.com';
+    protected basePath = '//localhost:8080';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -57,6 +58,99 @@ export class PostControllerService {
         return false;
     }
 
+
+    /**
+     * findAllBySeccionAdmin
+     *
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public findAllBySeccionAdminUsingGET(observe?: 'body', reportProgress?: boolean): Observable<GenericResponseListPostDtoOnly>;
+    public findAllBySeccionAdminUsingGET(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponseListPostDtoOnly>>;
+    public findAllBySeccionAdminUsingGET(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponseListPostDtoOnly>>;
+    public findAllBySeccionAdminUsingGET(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (JWT) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GenericResponseListPostDtoOnly>('get',`${this.basePath}/api/posts/findAllBySeccionAdmin`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * findAllBySeccion
+     *
+     * @param nombre nombre
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public findAllBySeccionUsingGET(nombre: string, observe?: 'body', reportProgress?: boolean): Observable<GenericResponseListPostDto>;
+    public findAllBySeccionUsingGET(nombre: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponseListPostDto>>;
+    public findAllBySeccionUsingGET(nombre: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponseListPostDto>>;
+    public findAllBySeccionUsingGET(nombre: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (nombre === null || nombre === undefined) {
+            throw new Error('Required parameter nombre was null or undefined when calling findAllBySeccionUsingGET.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (nombre !== undefined && nombre !== null) {
+            queryParameters = queryParameters.set('nombre', <any>nombre);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (JWT) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GenericResponseListPostDto>('get',`${this.basePath}/api/posts/findAllBySeccion`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * findPostById

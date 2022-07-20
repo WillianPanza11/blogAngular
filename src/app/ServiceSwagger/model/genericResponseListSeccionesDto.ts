@@ -9,16 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Usuario } from './usuario';
+import { SeccionesDto } from './seccionesDto';
 
-export interface PostDto { 
-    content?: string;
-    createdOn?: Date;
-    id?: number;
-    idSecciones?: number;
-    iduser?: number;
-    title?: string;
-    updatedOn?: Date;
-    user?: Usuario;
-    username?: string;
+export interface GenericResponseListSeccionesDto { 
+    message?: string;
+    object?: Array<SeccionesDto>;
+    status?: number;
 }

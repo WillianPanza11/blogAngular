@@ -3,6 +3,36 @@ background: #bdc3c7;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to bottom, #2c3e50, #bdc3c7);  /* Chrome 10-25, Safari 5.1-6 */
 background: linear-gradient(to bottom, #2c3e50, #bdc3c7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+.flex-container {
+  display: flex;
+  height: 50px;
+}
+
+.altura{
+  height: 38px;
+}
+
+.espacio{
+  margin-left: 10px;
+  margin-right: 10px;
+  /*O usando los padding*/
+}
+
+select:focus{ outline: none;}
+
+.caja::after{
+ content:"\025be";
+ display:table-cell;
+ padding-top:7px;
+ text-align:center;
+ width:30px;
+ height:30px;
+ background-color:#485563;
+ position:absolute;
+ top:0;
+ right:0px;
+ pointer-events: none;
+}
 
 .fondoAll{
   background: #485563; /* fallback for old browsers */
@@ -90,7 +120,7 @@ nav .logout{
   font-size: 14px;
   letter-spacing: 1.9px;
   font-weight: 400;
-  margin: .5em .5em .5em 0;
+  /*margin: .5em .5em .5em 0;*/
   padding: 12px 2em;
   color: #fff;
   background-color: #e50914;

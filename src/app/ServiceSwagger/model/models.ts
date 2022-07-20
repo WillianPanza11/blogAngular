@@ -1,5 +1,7 @@
 export * from './genericResponseJwtDto';
 export * from './genericResponseListPostDto';
+export * from './genericResponseListPostDtoOnly';
+export * from './genericResponseListSeccionesDto';
 export * from './genericResponseOptionalUsuario';
 export * from './genericResponsePostDto';
 export * from './genericResponsestring';
@@ -9,6 +11,8 @@ export * from './loginUsuario';
 export * from './modelAndView';
 export * from './nuevoUsuario';
 export * from './postDto';
+export * from './postDtoOnly';
 export * from './rol';
+export * from './seccionesDto';
 export * from './usuario';
 export * from './view';

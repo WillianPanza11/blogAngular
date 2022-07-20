@@ -38,41 +38,47 @@ export class LoginComponent implements OnInit {
     }
 
     this.formGroup = this.formBuilder.group({
-      nombreUser: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
-      pass: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+      nombreUser: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
+      pass: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
     });
   }
+
+  get nombreUser() { return this.formGroup.get('nombreUser'); }
+  get pass() { return this.formGroup.get('pass'); }
 
   onSubmit() {
     this.loginUsuario.nombreUsuario = this.nombreUsuario;
     this.loginUsuario.password = this.password;
-    this.authService.loginUsingPOST(this.loginUsuario).subscribe(data => {
-      if (data.object != null) {
-        this.isLogged = true;
-        this.isLoginFail = false;
+    if (this.formGroup.valid) {
+      this.authService.loginUsingPOST(this.loginUsuario).subscribe(data => {
+        if (data.object != null) {
+          this.isLogged = true;
+          this.isLoginFail = false;
 
-        this.tokenService.setToken(data.object.token!);
-        this.tokenService.setUserName(data.object.nombreUsuario || '');
-        this.tokenService.setAuthorities(data.object.authorities as string[]);
+          this.tokenService.setToken(data.object.token!);
+          this.tokenService.setUserName(data.object.nombreUsuario || '');
+          this.tokenService.setAuthorities(data.object.authorities as string[]);
 
-        this.roles = data.object.authorities as string[];
+          this.roles = data.object.authorities as string[];
 
 
-        this.toastr.success('INGRESADO CORRECTAMENTE ' + this.loginUsuario.nombreUsuario?.toUpperCase(), 'BIENVENIDO');
-        this.authService.findNombreUsingGET(this.loginUsuario.nombreUsuario).subscribe(data => {
-          if (data.object != null) {
-            this.setLocalStorage(data.object);
-            this.router.navigate(['/']);
-          }
-        });
-      } else {
+          this.toastr.success('INGRESADO CORRECTAMENTE ' + this.loginUsuario.nombreUsuario?.toUpperCase(), 'BIENVENIDO');
+          this.authService.findNombreUsingGET(this.loginUsuario.nombreUsuario).subscribe(data => {
+            if (data.object != null) {
+              this.setLocalStorage(data.object);
+              this.router.navigate(['/']);
+            }
+          });
+        } else {
+          this.toastr.error('ERROR AL INGRESAR ' + this.loginUsuario.nombreUsuario?.toUpperCase(), 'VERIFIQUE SUS DATOS');
+        }
+
+      }, err => {
         this.toastr.error('ERROR AL INGRESAR ' + this.loginUsuario.nombreUsuario?.toUpperCase(), 'VERIFIQUE SUS DATOS');
-      }
-
-    }, err => {
-      this.toastr.error('ERROR AL INGRESAR ' + this.loginUsuario.nombreUsuario?.toUpperCase(), 'VERIFIQUE SUS DATOS');
+      });
+    } else {
+      this.toastr.error('LLENE TODOS LOS CAMPOS', 'ERROR');
     }
-    );
   }
 
   setLocalStorage(user: any) {

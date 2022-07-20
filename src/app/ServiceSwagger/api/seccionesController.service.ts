@@ -17,18 +17,16 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { GenericResponseJwtDto } from '../model/genericResponseJwtDto';
-import { GenericResponseOptionalUsuario } from '../model/genericResponseOptionalUsuario';
+import { GenericResponseListSeccionesDto } from '../model/genericResponseListSeccionesDto';
 import { GenericResponsestring } from '../model/genericResponsestring';
-import { LoginUsuario } from '../model/loginUsuario';
-import { NuevoUsuario } from '../model/nuevoUsuario';
+import { SeccionesDto } from '../model/seccionesDto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
-export class AuthControllerService {
+export class SeccionesControllerService {
 
     protected basePath = '//localhost:8080';
     public defaultHeaders = new HttpHeaders();
@@ -60,71 +58,19 @@ export class AuthControllerService {
 
 
     /**
-     * findNombre
+     * guardarSecciones
      *
-     * @param nombreUsuario nombreUsuario
+     * @param body seccionesDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findNombreUsingGET(nombreUsuario: string, observe?: 'body', reportProgress?: boolean): Observable<GenericResponseOptionalUsuario>;
-    public findNombreUsingGET(nombreUsuario: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponseOptionalUsuario>>;
-    public findNombreUsingGET(nombreUsuario: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponseOptionalUsuario>>;
-    public findNombreUsingGET(nombreUsuario: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (nombreUsuario === null || nombreUsuario === undefined) {
-            throw new Error('Required parameter nombreUsuario was null or undefined when calling findNombreUsingGET.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (nombreUsuario !== undefined && nombreUsuario !== null) {
-            queryParameters = queryParameters.set('nombreUsuario', <any>nombreUsuario);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (JWT) required
-        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
-            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<GenericResponseOptionalUsuario>('get',`${this.basePath}/auth/findUser`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * login
-     *
-     * @param body loginUsuario
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public loginUsingPOST(body: LoginUsuario, observe?: 'body', reportProgress?: boolean): Observable<GenericResponseJwtDto>;
-    public loginUsingPOST(body: LoginUsuario, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponseJwtDto>>;
-    public loginUsingPOST(body: LoginUsuario, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponseJwtDto>>;
-    public loginUsingPOST(body: LoginUsuario, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public guardarSeccionesUsingPOST(body: SeccionesDto, observe?: 'body', reportProgress?: boolean): Observable<GenericResponsestring>;
+    public guardarSeccionesUsingPOST(body: SeccionesDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponsestring>>;
+    public guardarSeccionesUsingPOST(body: SeccionesDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponsestring>>;
+    public guardarSeccionesUsingPOST(body: SeccionesDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling loginUsingPOST.');
+            throw new Error('Required parameter body was null or undefined when calling guardarSeccionesUsingPOST.');
         }
 
         let headers = this.defaultHeaders;
@@ -152,7 +98,7 @@ export class AuthControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GenericResponseJwtDto>('post',`${this.basePath}/auth/login`,
+        return this.httpClient.request<GenericResponsestring>('post',`${this.basePath}/secciones/save`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -164,19 +110,71 @@ export class AuthControllerService {
     }
 
     /**
-     * nuevo
+     * listarSecciones
      *
-     * @param body nuevoUsuario
+     * @param isAdmin isAdmin
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public nuevoUsingPOST(body: NuevoUsuario, observe?: 'body', reportProgress?: boolean): Observable<GenericResponsestring>;
-    public nuevoUsingPOST(body: NuevoUsuario, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponsestring>>;
-    public nuevoUsingPOST(body: NuevoUsuario, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponsestring>>;
-    public nuevoUsingPOST(body: NuevoUsuario, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public listarSeccionesUsingGET(isAdmin: string, observe?: 'body', reportProgress?: boolean): Observable<GenericResponseListSeccionesDto>;
+    public listarSeccionesUsingGET(isAdmin: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponseListSeccionesDto>>;
+    public listarSeccionesUsingGET(isAdmin: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponseListSeccionesDto>>;
+    public listarSeccionesUsingGET(isAdmin: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (isAdmin === null || isAdmin === undefined) {
+            throw new Error('Required parameter isAdmin was null or undefined when calling listarSeccionesUsingGET.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (isAdmin !== undefined && isAdmin !== null) {
+            queryParameters = queryParameters.set('isAdmin', <any>isAdmin);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (JWT) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GenericResponseListSeccionesDto>('get',`${this.basePath}/secciones/listar-secciones`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * updatePost
+     *
+     * @param body seccionesDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updatePostUsingPUT1(body: SeccionesDto, observe?: 'body', reportProgress?: boolean): Observable<GenericResponsestring>;
+    public updatePostUsingPUT1(body: SeccionesDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericResponsestring>>;
+    public updatePostUsingPUT1(body: SeccionesDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericResponsestring>>;
+    public updatePostUsingPUT1(body: SeccionesDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling nuevoUsingPOST.');
+            throw new Error('Required parameter body was null or undefined when calling updatePostUsingPUT1.');
         }
 
         let headers = this.defaultHeaders;
@@ -204,7 +202,7 @@ export class AuthControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GenericResponsestring>('post',`${this.basePath}/auth/nuevo`,
+        return this.httpClient.request<GenericResponsestring>('put',`${this.basePath}/secciones/updateSecciones`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

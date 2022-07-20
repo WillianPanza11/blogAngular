@@ -9,9 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Usuario } from './usuario';
 
-export interface PostDto { 
+export interface PostDtoOnly { 
     content?: string;
     createdOn?: Date;
     id?: number;
@@ -19,6 +18,5 @@ export interface PostDto {
     iduser?: number;
     title?: string;
     updatedOn?: Date;
-    user?: Usuario;
     username?: string;
 }

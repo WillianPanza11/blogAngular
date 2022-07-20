@@ -4,4 +4,6 @@ export * from './basicErrorController.service';
 import { BasicErrorControllerService } from './basicErrorController.service';
 export * from './postController.service';
 import { PostControllerService } from './postController.service';
-export const APIS = [AuthControllerService, BasicErrorControllerService, PostControllerService];
+export * from './seccionesController.service';
+import { SeccionesControllerService } from './seccionesController.service';
+export const APIS = [AuthControllerService, BasicErrorControllerService, PostControllerService, SeccionesControllerService];

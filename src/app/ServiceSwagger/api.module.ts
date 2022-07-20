@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthControllerService } from './api/authController.service';
 import { BasicErrorControllerService } from './api/basicErrorController.service';
 import { PostControllerService } from './api/postController.service';
+import { SeccionesControllerService } from './api/seccionesController.service';
 
 @NgModule({
   imports:      [],
@@ -14,7 +15,8 @@ import { PostControllerService } from './api/postController.service';
   providers: [
     AuthControllerService,
     BasicErrorControllerService,
-    PostControllerService ]
+    PostControllerService,
+    SeccionesControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<any> {
